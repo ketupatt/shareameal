@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileEditController;
 /*
 |--------------------------------------------------------------------------
 | Public Routes (No Login Required)
@@ -31,13 +31,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/feed', [FeedController::class, 'index'])->name('feed');
     Route::get('/myposts', [PostController::class, 'myPosts'])->name('myposts');
 
-    // PROFILE PAGE
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    // Show profile page
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 
+// Show edit page
+Route::get('/profile/edit', [ProfileEditController::class, 'edit'])->name('profile.edit');
 
-    // EDIT PROFILE PAGE
-    Route::get('/profile/edit', [ProfileEditController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileEditController::class, 'update'])->name('profile.update');
+// Update profile (RESTful PUT)
+Route::put('/profile', [ProfileEditController::class, 'update'])->name('profile.update');
 
 
 
