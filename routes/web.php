@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('mainpage');   // resources/views/mainpage.blade.php
 })->name('mainpage');
 
-Route::get('/about', function() {
-    return view('about');
+Route::get('/reportmoderation', function() {
+    return view('/reportmoderation');
 });
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
