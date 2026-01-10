@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <title>Edit Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layout') {{-- Using master layout --}}
 
-    <link href="{{ asset('logis/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('logis/assets/css/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/profile.css') }}" rel="stylesheet">
+@section('title', 'Profile - ShareAMeal')
+@section('body-class', 'profile-page')
+
+@section('content')
 </head>
 
 <body>
-
-@include('profile.profile-header')
 
 <main class="container" style="margin-top:120px">
 
