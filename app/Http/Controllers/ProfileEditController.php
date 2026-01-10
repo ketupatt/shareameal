@@ -13,8 +13,8 @@ class ProfileEditController extends Controller
      */
     public function edit()
     {
-        $user = Auth::user();
-        return view('profileedit', compact('user'));
+        $user = Auth::user(); // get current logged-in user
+        return view('profileedit', compact('user')); // load blade and pass user
     }
 
     /**
@@ -29,15 +29,22 @@ class ProfileEditController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
+            'password' => 'nullable|min:8|confirmed', // optional password
         ]);
 
         // Update user data
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->phone = $request->phone; // optional, if column exists
+        $user->phone = $request->phone; // optional, only if column exists
+
+        // Update password if provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
 
         $user->save();
 
+        // Redirect back to profile with success message
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
 }
