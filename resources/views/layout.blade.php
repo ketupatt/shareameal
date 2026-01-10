@@ -26,7 +26,6 @@
           <li><a href="{{ route('mainpage') }}" class=>Home</a></li>
           <li><a href="{{ route('feed') }}">Main Feed</a></li>
           <li><a href="{{ route('myposts') }}">My Posts</a></li>
-          <li><a href="{{ route('reportmoderation') }}">Report Moderation</a></li>
           @guest
             <li><a href="{{ route('login') }}">Login</a></li>
           @endguest
