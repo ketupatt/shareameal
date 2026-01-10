@@ -23,18 +23,35 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{{ route('mainpage') }}" class=>Home</a></li>
-          <li><a href="{{ route('feed') }}">Main Feed</a></li>
-          <li><a href="{{ route('myposts') }}">My Posts</a></li>
+          <li>
+            <a href="{{ route('mainpage') }}" class="{{ Request::routeIs('mainpage') ? 'active' : '' }}">Home</a>
+          </li>
+          <li>
+            <a href="{{ route('feed') }}" class="{{ Request::routeIs('feed') ? 'active' : '' }}">Main Feed</a>
+          </li>
+          <li>
+            <a href="{{ route('myposts') }}" class="{{ Request::routeIs('myposts') ? 'active' : '' }}">My Posts</a>
+          </li>
+
           @guest
-            <li><a href="{{ route('login') }}">Login</a></li>
+            <li>
+              <a href="{{ route('login') }}" class="{{ Request::routeIs('login') ? 'active' : '' }}">Login</a>
+            </li>
           @endguest
 
           @auth
-          <li>
-            <a href="{{ route('profile') }}" class="active">Profile</a>
-        </li>
-        @endauth
+            <li>
+              <a href="{{ route('profile') }}" class="{{ Request::routeIs('profile') ? 'active' : '' }}">Profile</a>
+            </li>
+          @endauth
+
+          @auth
+            @if(auth()->user()->is_admin)
+              <li>
+                <a href="{{ route('admin') }}" class="{{ Request::routeIs('admin*') ? 'active' : '' }}">Admin</a>
+              </li>
+            @endif
+          @endauth
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
