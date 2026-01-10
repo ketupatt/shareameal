@@ -12,7 +12,7 @@
 
 <body>
 
-@include('profile.profile-header') {{-- optional if you later extract --}}
+@include('profile.profile-header')
 
 <main class="container" style="margin-top:120px">
 
@@ -22,33 +22,68 @@
 
         <div class="profile-info-card mt-4">
 
-            <form>
+            <!-- ✅ FORM UPDATED -->
+            <form method="POST" action="{{ route('profile.update') }}">
+                @csrf
+                @method('PUT')
+
                 <div class="row g-3">
+
                     <div class="col-md-6">
                         <label>Name</label>
-                        <input type="text" class="form-control" value="{{ $user->name }}">
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               value="{{ old('name', $user->name) }}"
+                               required>
                     </div>
 
                     <div class="col-md-6">
                         <label>Email</label>
-                        <input type="email" class="form-control" value="{{ $user->email }}">
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               value="{{ old('email', $user->email) }}"
+                               required>
                     </div>
 
                     <div class="col-md-6">
                         <label>Matric No</label>
-                        <input type="text" class="form-control" value="{{ $user->matric_no }}">
+                        <input type="text"
+                               class="form-control"
+                               value="{{ $user->matric_no }}"
+                               readonly>
                     </div>
 
                     <div class="col-md-6">
                         <label>New Password</label>
-                        <input type="password" class="form-control">
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               placeholder="Leave blank if unchanged">
                     </div>
+
+                    <div class="col-md-6">
+                        <label>Confirm Password</label>
+                        <input type="password"
+                               name="password_confirmation"
+                               class="form-control"
+                               placeholder="Confirm new password">
+                    </div>
+
                 </div>
 
+                <!-- ACTION BUTTONS -->
                 <div class="mt-4">
-                    <button class="btn btn-success">SAVE</button>
-                    <a href="{{ route('profile') }}" class="btn btn-secondary">CANCEL</a>
+                    <button type="submit" class="btn btn-success">
+                        SAVE
+                    </button>
+
+                    <a href="{{ route('profile') }}" class="btn btn-secondary">
+                        CANCEL
+                    </a>
                 </div>
+
             </form>
 
         </div>

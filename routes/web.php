@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
-
+use App\Http\Controllers\ProfileController;
 /*
 |--------------------------------------------------------------------------
 | Public Routes (No Login Required)
@@ -27,15 +27,18 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
 
-    // PROFILE PAGE
-    Route::get('/profile', [ProfileController::class, 'show'])
-        ->name('profile');
 
-    // EDIT PROFILE PAGE
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
     Route::get('/feed', [FeedController::class, 'index'])->name('feed');
     Route::get('/myposts', [PostController::class, 'myPosts'])->name('myposts');
+
+    // PROFILE PAGE
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+
+    // EDIT PROFILE PAGE
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+
 
 
 });
