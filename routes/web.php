@@ -36,8 +36,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     // EDIT PROFILE PAGE
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/edit', [ProfileEditController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileEditController::class, 'update'])->name('profile.update');
 
 
 
