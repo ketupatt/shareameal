@@ -1,48 +1,43 @@
-@extends('layout')
+<?php
 
-@section('title', 'Edit Profile')
+namespace App\Http\Controllers;
 
-@section('content')
-<div class="container" style="margin-top:120px">
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-    <div class="profile-wrapper">
+class ProfileEditController extends Controller
+{
+    /**
+     * Show the profile edit page
+     */
+    public function edit()
+    {
+        $user = Auth::user();
+        return view('profileedit', compact('user'));
+    }
 
-        <div class="profile-title text-center mb-4">
-            EDIT PROFILE
-        </div>
+    /**
+     * Update the user profile
+     */
+    public function update(Request $request)
+    {
+        $user = Auth::user();
 
-        <div class="profile-info-card">
-            <form method="POST" action="{{ route('profile.update') }}">
-                @csrf
+        // Validate input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+        ]);
 
-                <div class="row g-3">
+        // Update user data
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone; // optional, if column exists
 
-                    <div class="col-md-6">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-control" name="name" value="{{ auth()->user()->name }}">
-                    </div>
+        $user->save();
 
-                    <div class="col-md-6">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" value="{{ auth()->user()->email }}">
-                    </div>
-
-                    <div class="col-12">
-                        <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone">
-                    </div>
-
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary w-100 mt-3">
-                            Update Profile
-                        </button>
-                    </div>
-
-                </div>
-            </form>
-        </div>
-
-    </div>
-
-</div>
-@endsection
+        return redirect()->route('profile')->with('success', 'Profile updated successfully!');
+    }
+}
