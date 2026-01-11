@@ -1,5 +1,5 @@
 /* =======================
-   Profile Page CSS
+   Profile Edit Page CSS
    ======================= */
 
 /* --- Global & Layout --- */
@@ -11,7 +11,7 @@ body {
 /* Profile container */
 .profile-wrapper {
     max-width: 1150px;
-    margin: 120px auto 40px; /* increased top margin from 60px to 120px */
+    margin: 120px auto 40px; /* match profile page */
     padding: 0 20px;
 }
 
@@ -24,9 +24,8 @@ body {
     border-radius: 50px;
     display: inline-block;
     width: 100%;
-    margin-bottom: 35px; /* slightly more space below title */
+    margin-bottom: 35px;
 }
-
 
 /* --- LEFT COLUMN --- */
 .profile-left {
@@ -48,7 +47,8 @@ body {
     align-items: center;
 }
 
-.profile-avatar-card svg {
+.profile-avatar-card svg,
+.profile-avatar-card img {
     width: 200px;
     height: 200px;
 }
@@ -79,39 +79,42 @@ body {
     justify-content: center;
     align-items: center;
     line-height: 1.1;
-    ;
 }
 
 .streak-text h5 {
     font-weight: 800;
     font-size: 22px;
     margin: 0;
-    color: #ffffff
+    color: #ffffff;
 }
 
 .streak-text h2 {
     font-weight: 800;
     font-size: 46px;
     margin: 0;
-    color: #ffffff
+    color: #ffffff;
 }
 
-/* Update Button */
-.btn-update {
-    background: #C62A1B;
-    color: white;
+/* Update / Back Buttons */
+.btn-update,
+.btn-save,
+.btn-logout,
+.btn-delete {
     font-weight: 800;
-    border: none;
     border-radius: 12px;
-    padding: 12px;
-    cursor: pointer;
-    width: 100%;
+    padding: 12px 25px;
     text-align: center;
-    box-shadow: 0 6px 0 rgba(0,0,0,0.12);
+    cursor: pointer;
     text-decoration: none;
     display: flex;
     justify-content: center;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.12);
 }
+
+.btn-update { background: #C62A1B; color: white; border: none; }
+.btn-save { background: #00c0ff; color: white; border: none; }
+.btn-logout { background: #98E587; color: white; border: none; }
+.btn-delete { background: #C62A1B; color: white; border: none; }
 
 /* --- RIGHT COLUMN --- */
 .profile-right {
@@ -161,22 +164,22 @@ body {
     margin-bottom: 8px;
 }
 
+.profile-form input.form-control,
+.readonly-input {
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.12);
+    padding: 12px;
+    width: 100%;
+    font-weight: 600;
+}
+
 .readonly-input {
     background-color: #ECB94C !important;
     border: none !important;
-    border-radius: 12px !important;
-    padding: 12px !important;
-    font-weight: 600;
-    color: #111;
-    width: 100%;
 }
 
 /* Notification dropdown */
-.notify-wrapper {
-    position: relative;
-    width: 100%;
-}
-
+.notify-wrapper { position: relative; width: 100%; }
 .notify-btn {
     width: 100%;
     background: white;
@@ -190,7 +193,6 @@ body {
     justify-content: space-between;
     align-items: center;
 }
-
 .notify-menu {
     display: none;
     position: absolute;
@@ -204,18 +206,15 @@ body {
     z-index: 10;
 }
 
-.arrow {
-    font-size: 16px;
-}
-
+/* Container for each row */
 .toggle-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex;              /* arrange items horizontally */
+    justify-content: space-between; /* text on left, switch on right */
+    align-items: center;        /* vertically center */
     margin-bottom: 14px;
-    font-weight: 600;
 }
 
+/* Toggle Switch */
 .switch {
     position: relative;
     display: inline-block;
@@ -224,15 +223,18 @@ body {
 }
 
 .switch input {
-    display: none;
+    display: none; /* hide default checkbox */
 }
 
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: #ccc;
-    transition: .3s;
+    transition: 0.3s;
     border-radius: 26px;
 }
 
@@ -244,42 +246,27 @@ body {
     left: 2px;
     bottom: 2px;
     background: white;
-    transition: .3s;
+    transition: 0.3s;
     border-radius: 50%;
 }
 
-input:checked + .slider {
+.switch input:checked + .slider {
     background: #4CAF50;
 }
 
-input:checked + .slider:before {
+.switch input:checked + .slider:before {
     transform: translateX(24px);
 }
+
+
 
 /* Action Buttons */
 .profile-actions {
     display: flex;
     gap: 20px;
     margin-top: 20px;
-    justify-content: center; 
-}
-
-.btn-delete {
-    background-color: #C62A1B;
-    color: white;
-    font-weight: 800;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 25px;
-}
-
-.btn-logout {
-    background-color: #98E587;
-    color: white;
-    font-weight: 800;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 25px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 /* Confirmation popup */
@@ -292,7 +279,6 @@ input:checked + .slider:before {
     justify-content: center;
     align-items: center;
 }
-
 .confirm-content {
     background: white;
     border-radius: 12px;
@@ -300,13 +286,11 @@ input:checked + .slider:before {
     max-width: 400px;
     text-align: center;
 }
-
 .confirm-buttons {
     margin-top: 20px;
     display: flex;
     justify-content: space-around;
 }
-
 .confirm-buttons button {
     padding: 10px 20px;
     border: none;
@@ -314,12 +298,6 @@ input:checked + .slider:before {
     font-weight: 800;
     cursor: pointer;
 }
+.cancel-btn { background: #ccc; }
+.delete-btn { background: #C62A1B; color: white; }
 
-.cancel-btn {
-    background: #ccc;
-}
-
-.delete-btn {
-    background: #C62A1B;
-    color: white;
-}

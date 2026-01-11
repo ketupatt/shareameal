@@ -18,12 +18,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'matric_no',
-        'email',
-        'password',
-    ];
-
+    'name',
+    'matric_no',
+    'staff_id', // Added this
+    'email',
+    'password',
+    'is_admin', // Added this
+];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -40,10 +41,37 @@ class User extends Authenticatable
      * @return array<string, string>
      */
     protected function casts(): array
-    {
-        return [
-            'matric_no' => 'string',
-            'password' => 'hashed',
-        ];
+{
+    return [
+        'matric_no' => 'string',
+        'staff_id' => 'string',
+        'password' => 'hashed',
+        'is_admin' => 'boolean', // Ensures 1/0 from DB becomes true/false in PHP
+    ];
+}
+
+    public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'matric_no' => ['required', 'string'],
+        'password' => ['required'],
+    ]);
+
+    // This handles BOTH admin and user because both use matric_no
+    if (Auth::attempt($credentials, $request->filled('remember'))) {
+        $request->session()->regenerate();
+
+        // Check if the authenticated person is an Admin
+        if (Auth::user()->is_admin) {
+            return redirect()->intended('/admin/reports'); 
+        }
+
+        // Otherwise, they are a normal user
+        return redirect()->intended('/profile');
     }
+
+    return back()->withErrors([
+        'matric_no' => 'The provided credentials do not match our records.',
+    ])->withInput();
+}
 }

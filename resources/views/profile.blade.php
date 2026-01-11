@@ -1,7 +1,15 @@
-@extends('layout') {{-- Using master layout --}}
+@extends('layout')
 
 @section('title', 'Profile - ShareAMeal')
 @section('body-class', 'profile-page')
+
+@push('page-css')
+<link href="{{ asset('assets/css/profile.css') }}" rel="stylesheet">
+@endpush
+
+@push('page-js')
+<script src="{{ asset('assets/js/profile.js') }}"></script>
+@endpush
 
 @section('content')
 <main class="container profile-wrapper">
@@ -43,80 +51,87 @@
 
             <div class="profile-info-card">
 
-                <!-- Name + Date -->
-                <div class="profile-info-row">
-                    <div class="profile-name">🔍 {{ $user->name }}</div>
-                    <div class="profile-date">Thu, 9 Dec 2025</div>
+    <!-- Name + Date -->
+    <div class="profile-info-row">
+        <div class="profile-name">🔍 {{ $user->name }}</div>
+        <div class="profile-date">{{ now()->format('D, d M Y') }}</div>
+    </div>
+
+    <!-- Read-only Form Fields -->
+    <div class="profile-form row g-3">
+
+        <div class="col-md-6">
+            <label>Matric No</label>
+            <input type="text" class="form-control readonly-input" value="{{ $user->matric_no }}" readonly>
+        </div>
+
+        <div class="col-md-6">
+            <label>Password</label>
+            <input type="password" class="form-control readonly-input" value="••••••••" readonly>
+        </div>
+
+        <div class="col-md-6">
+            <label>Email</label>
+            <input type="email" class="form-control readonly-input" value="{{ $user->email }}" readonly>
+        </div>
+
+        <div class="col-md-6">
+            <label>Notification</label>
+            <div class="notify-wrapper">
+                <button class="notify-btn" id="notifyToggle">
+                  🔔 Click here
+                  <span class="arrow">▼</span>
+                </button>
+
+                <div class="notify-menu" id="notifyMenu">
+                    <div class="toggle-row">
+                        <span>Email when my post is claimed</span>
+                        <label class="switch">
+                            <input type="checkbox" id="notifyClaimed" {{ $user->notify_claimed ? 'checked' : '' }}>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <span>Email when admin sends warning</span>
+                        <label class="switch">
+                            <input type="checkbox" id="notifyWarning" {{ $user->notify_warning ? 'checked' : '' }}>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <span>Email for expiring post</span>
+                        <label class="switch">
+                            <input type="checkbox" id="notifyExpiring" {{ $user->notify_expiring ? 'checked' : '' }}>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
-
-                <!-- Form Fields -->
-                <div class="profile-form row g-3">
-
-                    <div class="col-md-6">
-                        <label>Matric No</label>
-                        <input type="text" class="readonly-input" value="{{ $user->matric_no }}" readonly>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label>Password</label>
-                        <input type="password" class="readonly-input" value="password" readonly>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label>Email</label>
-                        <input type="email" class="readonly-input" value="{{ $user->email }}" readonly>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label>Notification</label>
-                        <div class="notify-wrapper">
-                            <button class="notify-btn" id="notifyToggle">
-                                🔔 Click here
-                                <span class="arrow">▼</span>
-                            </button>
-
-                            <div class="notify-menu" id="notifyMenu">
-                                <div class="toggle-row">
-                                    <span>Email when my post is claimed</span>
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                                <div class="toggle-row">
-                                    <span>Email when admin sends warning</span>
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                                <div class="toggle-row">
-                                    <span>Email for expiring post</span>
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
+        </div>
+    </div> <!-- END profile-form -->
 
-            <!-- Action Buttons -->
-            <div class="profile-actions mt-4">
-                <button class="btn-delete" onclick="showConfirm()">DELETE ACCOUNT</button>
+</div> <!-- END profile-info-card -->
+
+
+            <!-- Action Buttons BELOW THE CARD -->
+            <div class="profile-actions mt-4 d-flex flex-wrap gap-2 justify-content-center">
+                <button type="button" class="btn-delete" id="deleteBtn">DELETE ACCOUNT</button>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button class="btn-logout">LOG OUT</button>
+                    <button type="submit" class="btn-logout">LOG OUT</button>
+                </form>
+
+                {{-- Hidden Delete Form --}}
+                <form id="delete-account-form" method="POST" action="{{ route('profile.destroy') }}" style="display:none;">
+                    @csrf
+                    @method('DELETE')
                 </form>
             </div>
 
         </div>
-
     </div>
 </main>
 
@@ -130,4 +145,5 @@
         </div>
     </div>
 </div>
+
 @endsection

@@ -7,22 +7,38 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // Show login form
     public function showLoginForm()
     {
-        return view('login'); // resources/views/login.blade.php
+        return view('login');
     }
 
-    // Handle login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'matric_no' => ['required', 'string'],
+        // We validate 'matric_no' as the input field name from your form
+        $request->validate([
+            'matric_no' => ['required', 'string'], 
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
+        $loginId = $request->input('matric_no');
+        $password = $request->input('password');
+        $remember = $request->filled('remember');
+
+        // 1. Attempt login as Student (matric_no)
+        $loginStudent = Auth::attempt(['matric_no' => $loginId, 'password' => $password], $remember);
+        
+        // 2. Attempt login as Staff/Admin (staff_id)
+        $loginStaff = Auth::attempt(['staff_id' => $loginId, 'password' => $password], $remember);
+
+        if ($loginStudent || $loginStaff) {
             $request->session()->regenerate();
+
+            // Check if the authenticated user is an Admin
+            if (Auth::user()->is_admin) {
+                return redirect()->intended('/admin/reports'); 
+            }
+
+            // Otherwise, redirect to normal user profile
             return redirect()->intended('/profile');
         }
 
@@ -31,7 +47,6 @@ class LoginController extends Controller
         ])->withInput();
     }
 
-    // Logout
     public function logout(Request $request)
     {
         Auth::logout();
@@ -40,4 +55,3 @@ class LoginController extends Controller
         return redirect('/');
     }
 }
-

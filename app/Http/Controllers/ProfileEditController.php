@@ -13,8 +13,8 @@ class ProfileEditController extends Controller
      */
     public function edit()
     {
-        $user = Auth::user(); // get current logged-in user
-        return view('profileedit', compact('user')); // load blade and pass user
+        $user = Auth::user(); // Get current logged-in user
+        return view('profileedit', compact('user')); // Load Blade and pass user
     }
 
     /**
@@ -28,14 +28,12 @@ class ProfileEditController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
             'password' => 'nullable|min:8|confirmed', // optional password
         ]);
 
         // Update user data
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->phone = $request->phone; // optional, only if column exists
 
         // Update password if provided
         if ($request->filled('password')) {
@@ -44,7 +42,20 @@ class ProfileEditController extends Controller
 
         $user->save();
 
-        // Redirect back to profile with success message
+        // Redirect back to profile page with a success message
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
+
+    /**
+     * Delete the user account
+     */
+    public function destroy()
+    {
+        $user = Auth::user();
+        Auth::logout(); // log out user
+        $user->delete(); // delete account
+
+        return redirect('/')->with('success', 'Account deleted successfully!');
+    }
 }
+
